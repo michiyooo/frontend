@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Order History</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='order_history.css') }}">
+</head>
+<body>
+   <nav>
+    <a href="{{ url_for('order_form') }}">Place Order</a>
+    <a href="{{ url_for('order_management') }}">Manage Orders</a>
+    <a href="{{ url_for('order_history') }}">Order History</a>
+    <a href="{{ url_for('login') }}">Logout</a>
+   </nav>
+      <table id="historyTable">
+         <thead>
+            <tr>
+               <th>Order ID</th>
+               <th>Customer Name</th>
+               <th>Contact Number</th>
+               <th>Address</th>
+               <th>Pickup Place</th>
+               <th>Pickup Date</th>
+               <th>Delicacy</th>
+               <th>Quantity</th>
+               <th>Container</th>
+               <th>Special Request</th>
+               <th>Status</th>
+            </tr>
+         </thead>
+         <tbody>
+            <!-- Order history data here -->
+         </tbody>
+      </table>
+   </div>
+   </div>
+</body>
+</html>

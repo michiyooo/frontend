@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, content-scale=1.0">
+   <title>Order Management</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='order_management.css') }}">
+   <script src="{{ url_for('static', filename='script/order_management.js') }}" defer></script>
+</head>
+<body>
+   <nav>
+      <a href="{{ url_for('order_form') }}">Place Order</a>
+      <a href="{{ url_for('order_management') }}">Manage Orders</a>
+      <a href="{{ url_for('order_history') }}">Order History</a>
+      <a href="{{ url_for('login') }}">Logout</a>
+   </nav>
+   <div class="management-container">
+      <h2>Manage Orders</h2>
+      <button onclick="sortOrders('pickupDate')">Sort by Pickup Date</button>
+      <button onclick="sortOrders('delicacy')">Sort by Delicacy</button>
+      <button onclick="sortOrders('status')">Sort by Status</button>
+
+      <table id="ordersTable">
+         <thead>
+            <tr>
+               <th>Customer Name</th>
+               <th>Contact Number</th>
+               <th>Address</th>
+               <th>Pickup Place</th>
+               <th>Pickup Date</th>
+               <th>Delicacy</th>
+               <th>Quantity</th>
+               <th>Container</th>
+               <th>Special Request</th>
+               <th>Status</th>
+               <th>Actions</th>
+            </tr>
+         </thead>
+         <tbody>
+            <!-- Orders will be dynamically populated here -->
+            <tr>
+               <td><!-- Customer Name --></td>
+               <td><!-- Contact Number --></td>
+               <td><!-- Address --></td>
+               <td><!-- Pickup Place --></td>
+               <td><!-- Pickup Date --></td>
+               <td><!-- Delicacy --></td>
+               <td><!-- Quantity --></td>
+               <td><!-- Container --></td>
+               <td><!-- Special Request --></td>
+               <td>
+                  <select>
+                     <option value="pending">Pending</option>
+                     <option value="in-progress">In-Progress</option>
+                     <option value="completed">Completed</option>
+                  </select>
+               </td>
+               <td>
+                  <button onclick="changeOrder(this)">Change</button>
+                  <button onclick="deleteOrder(this)">Delete</button>
+               </td>
+            </tr>
+            <!-- More rows can be added dynamically -->
+         </tbody>
+      </table>
+   </div>
+</body>
+</html>
