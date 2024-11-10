@@ -68,9 +68,9 @@ function editOrder(orderId) {
     document.getElementById("status_" + orderId).style.display = 'none';
 
     // Show Save and Cancel buttons, hide Change button
-    document.querySelector(`button[onclick="editOrder(${orderId})"]`).style.display = 'none';
-    document.getElementById("save_" + orderId).style.display = 'inline-block';
-    document.getElementById("cancel_" + orderId).style.display = 'inline-block';
+    document.getElementById("change_button_" + orderId).style.display = 'none';
+    document.getElementById("save_button_" + orderId).style.display = 'inline-block';
+    document.getElementById("cancel_button_" + orderId).style.display = 'inline-block';
 }
 
 function cancelEdit(orderId) {
@@ -112,7 +112,7 @@ function cancelEdit(orderId) {
 }
 
 function saveOrder(orderId) {
-    // Submit the form data (this can be done via an AJAX request or a normal form submission)
+    // Gather the updated data
     let formData = {
         customer_name: document.getElementById("input_customer_name_" + orderId).value,
         contact_number: document.getElementById("input_contact_number_" + orderId).value,
@@ -126,20 +126,24 @@ function saveOrder(orderId) {
         status: document.getElementById("input_status_" + orderId).value,
     };
 
-    // Send the updated order data to the server using an AJAX request or form submission
-    fetch('/update_order/' + orderId, {
+    // Send updated data to the server
+    fetch(`/update_order/${orderId}`, {
         method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(response => {
-        if (response.ok) {
-            // Update the UI with the new values
-            cancelEdit(orderId);
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Order updated successfully!');
+            updateUI(orderId, formData);  // Update the UI with new data
         } else {
             alert('Failed to update order.');
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating the order.');
     });
 }
 

@@ -118,7 +118,7 @@ def login():
         user = User.query.first()
 
         if user and bcrypt.check_password_hash(user.password, password) and user.username == username:
-            flash("Login successful!")
+            
             return redirect(url_for('order_form'))  # Redirect to order form after login
         else:
             flash("Invalid username or password. Please try again.")
@@ -202,7 +202,7 @@ def order_form():
 
     return render_template('order_form.html')
 
-# Radix Sort by Date
+
 # Radix Sort by Date
 def radix_sort_by_date(orders):
     def get_date_key(order):
@@ -333,43 +333,29 @@ def remove_order(order_id):
 
     return jsonify({"success": True})  # Return success response for AJAX
 
-@app.route('/update_order/<int:order_id>', methods=['POST'])
-def update_order(order_id):
-    order = Order.query.get_or_404(order_id)
-    
-    # Get the data from the request
-    data = request.get_json()
-    
-    # Update the order fields with the new data
-    order.buyer.name = data.get('customer_name', order.buyer.name)
-    order.buyer.contact_number = data.get('contact_number', order.buyer.contact_number)
-    order.buyer.address = data.get('address', order.buyer.address)
-    order.pickup_place = data.get('pickup_place', order.pickup_place)
-    order.pickup_date = data.get('pickup_date', order.pickup_date)
-    order.delicacy.name = data.get('delicacy', order.delicacy.name)
-    order.quantity = data.get('quantity', order.quantity)
-    order.container_size.value = data.get('container', order.container_size.value)
-    order.special_request = data.get('special_request', order.special_request)
-    order.status = data.get('status', order.status)
-    
-    # Commit the changes to the database
-    db.session.commit()
-    
-    # Return the updated order data as JSON
-    updated_order = {
-        'customer_name': order.buyer.name,
-        'contact_number': order.buyer.contact_number,
-        'address': order.buyer.address,
-        'pickup_place': order.pickup_place,
-        'pickup_date': order.pickup_date.strftime('%Y-%m-%d'),
-        'delicacy': order.delicacy.name,
-        'quantity': order.quantity,
-        'container': order.container_size.value,
-        'special_request': order.special_request,
-        'status': order.status,
-    }
-    
-    return jsonify({'success': True, 'order': updated_order})
+@app.route('/update_order/<int:orderId>', methods=['POST'])
+def update_order(orderId):
+    data = request.json  # Receive the JSON data
+    order = Order.query.get(orderId)  # Get the order by ID
+
+    if order:
+        # Update each field with the received data
+        order.buyer.name = data['customer_name']
+        order.buyer.contact_number = data['contact_number']
+        order.buyer.address = data['address']
+        order.pickup_place = data['pickup_place']
+        order.pickup_date = data['pickup_date']
+        order.delicacy = data['delicacy']
+        order.quantity = data['quantity']
+        order.container_size = data['container']
+        order.special_request = data['special_request']
+        order.status = data['status']
+        
+        # Commit changes to the database
+        db.session.commit()
+        return jsonify(success=True, order=data)
+    else:
+        return jsonify(success=False, message="Order not found")
 
 @app.route('/delete_order/<int:order_id>', methods=['DELETE'])
 def delete_order(order_id):
@@ -378,6 +364,7 @@ def delete_order(order_id):
     db.session.commit()
     return '', 204  # No content
 
+#
 @app.route('/order_history')
 def order_history():
     # Fetch all orders including the removed ones
